@@ -108,7 +108,7 @@ review_node = functools.partial(agent_node, agent=research_agent, name="Reviewer
 test_agent = create_agent(
     llm,
     [python_repl_tool],  # DANGER: This tool executes code locally. Use with caution.
-    "You may generate safe Python code to test functions adn classes using unittest or pytest.",
+    "You may generate safe Python code to test functions and classes using unittest or pytest.",
 )
 test_node = functools.partial(agent_node, agent=test_agent, name="QA Tester")
 
