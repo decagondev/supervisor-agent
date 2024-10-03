@@ -24,7 +24,7 @@ tavily_tool = TavilySearchResults(max_results=5)
 
 python_repl_tool = PythonREPLTool()
 
-members = ["Researcher", "Coder", "Reviewer", "QA Tester"]
+members = ["Researcher", "Coder", "Reviewer", "QA Tester", "Poetry Writer"]
 system_prompt = (
     f"You are a supervisor agent tasked with managing the conversation between"
     f" the following members: {members}. Based on the following user request,"
@@ -62,6 +62,7 @@ prompt = ChatPromptTemplate.from_messages(
 ).partial(options=str(options), members=", ".join(members))
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, openai_api_key=openai_api_key)
+poetry_llm ChatOpenAI(model="gpt-4o-mini", temperature=0.2, openai_api_key=openai_api_key)
 
 supervisor_chain = (
     prompt
@@ -119,11 +120,15 @@ code_agent = create_agent(
 )
 code_node = functools.partial(agent_node, agent=code_agent, name="Coder")
 
+poetry_agent = create_agent(poetry_llm, [tavily_tool], "You are to write a short poem based upon the input given in the style of Dr Seuss")
+poetry_node = functools.partial(agent_node, agent=poetry_agent, name="Poetry Writer")
+
 workflow = StateGraph(AgentState)
 workflow.add_node("Reviewer", review_node)
 workflow.add_node("Researcher", research_node)
 workflow.add_node("Coder", code_node)
 workflow.add_node("QA Tester", test_node)
+workflow.add_node("Poetry Writer", poetry_node)
 workflow.add_node("supervisor", supervisor_chain)
 
 
