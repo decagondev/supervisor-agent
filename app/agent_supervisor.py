@@ -62,7 +62,7 @@ prompt = ChatPromptTemplate.from_messages(
 ).partial(options=str(options), members=", ".join(members))
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, openai_api_key=openai_api_key)
-poetry_llm ChatOpenAI(model="gpt-4o-mini", temperature=0.2, openai_api_key=openai_api_key)
+poetry_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2, openai_api_key=openai_api_key)
 
 supervisor_chain = (
     prompt
